@@ -120,8 +120,8 @@ differentialDrive1 = new DifferentialDrive (driveTrainGroupRight, driveTrainGrou
     double wheelCircumference = wheelDiameter * java.lang.Math.PI;
     double convertOneMotorRotationToInches = wheelCircumference/gearBoxRatio;
     //m_encoderLeft.setPositionConversionFactor(convertOneMotorRotationToInches);
-    m_encoderLeft.setVelocityConversionFactor(DriveTrainConstants.kLinearDistanceConversionFactor);
-m_encoderLeft.setVelocityConversionFactor(DriveTrainConstants.kLinearDistanceConversionFactor/60);
+    m_encoderLeft.setPositionConversionFactor(DriveTrainConstants.kLinearDistanceConversionFactor);
+    m_encoderLeft.setVelocityConversionFactor(DriveTrainConstants.kLinearDistanceConversionFactor/60);
 
     //Encoder starts in RPM, we need to get to inches/sec
     double convertMinToSeconds = 60;//converts RPM (Rev/min) to Rev/sec
@@ -181,7 +181,7 @@ public double getRightEncoderVelocity(){
     }
 
     public double getLeftEncoderVelocity(){
-        return m_encoderLeft.getVelocity();
+        return -m_encoderLeft.getVelocity();
     }
 
     public double getHeading(){
@@ -207,11 +207,32 @@ public double getRightEncoderVelocity(){
     public void tankDriveVolts(double leftVolts, double rightVolts){
         driveTrainGroupLeft.setVoltage(leftVolts); 
         driveTrainGroupRight.setVoltage(rightVolts);
-        DifferentialDrive.feed();
+        differentialDrive1.feed();
     }
 
     public double getAverageEncoderDistance(){
-        return (getLeftEncoderPosition()+getRightEncoderPosition());
+        return (getLeftEncoderPosition()+getRightEncoderPosition()/2.0);
+    }
+
+    public RelativeEncoder getLeftEncoder(){
+        return m_encoderLeft;
+    }
+
+    public RelativeEncoder getRightEncoder(){
+        return m_encoderRight;
+    }
+
+    public void setMaxOutput(double maxOutput){
+        differentialDrive1.setMaxOutput(maxOutput);
+    }
+
+    public void zeroHeading(){
+        m_Gyro.calibrate();
+        m_Gyro.reset();
+    }
+
+    public Gyro getGyro1(){
+        return getGyro();
     }
 
     @Override
