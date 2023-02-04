@@ -132,8 +132,8 @@ differentialDrive1 = new DifferentialDrive (driveTrainGroupRight, driveTrainGrou
     //m_encoderRight.setPositionConversionFactor(convertOneMotorRotationToInches);
     m_encoderRight.setPositionConversionFactor(DriveTrainConstants.kLinearDistanceConversionFactor);
     m_encoderRight.setVelocityConversionFactor(DriveTrainConstants.kLinearDistanceConversionFactor/60);
-   // m_encoderRight.setVelocityConversionFactor(convertOneRPMtoInPerSec);
-   
+    m_encoderRight.setVelocityConversionFactor(convertOneRPMtoInPerSec);
+
    m_Gyro.reset();
    m_Gyro.calibrate();
    resetEncoders();
@@ -181,7 +181,7 @@ public double getRightEncoderVelocity(){
     }
 
     public double getLeftEncoderVelocity(){
-        return -m_encoderLeft.getVelocity();
+        return m_encoderLeft.getVelocity();
     }
 
     public double getHeading(){
@@ -242,6 +242,8 @@ public double getRightEncoderVelocity(){
 
         SmartDashboard.putNumber("Left encoder value meters", getLeftEncoderPosition());
         SmartDashboard.putNumber("Right encoder value meters", getRightEncoderPosition());
+        SmartDashboard.putNumber("Left encoder velocity meters", getLeftEncoderVelocity());
+        SmartDashboard.putNumber("Right encoder velocity meters", getRightEncoderVelocity());
         SmartDashboard.putNumber("Gyro heading", getHeading());
 
     }
