@@ -88,7 +88,15 @@ private final XboxController operatorController = new XboxController(1);
       "pathplanner/generatedJSON/GoStraight.wpilib.json",
        true));
 
-     m_chooser.setDefaultOption("Go Straight", loadPathplannerTrajectoryToRamseteCommand(
+       m_chooser.addOption("Left Side Go Straight and Get Away ", loadPathplannerTrajectoryToRamseteCommand(
+        "pathplanner/generatedJSON/Left Side Go Forward and Get Away.wpilib.json",
+         true));
+      
+      m_chooser.addOption("Left Side Cone in Slot", loadPathplannerTrajectoryToRamseteCommand(
+        "pathplanner/generatedJSON/Left Side Cone in Slot.wpilib.json",
+       true));
+
+     m_chooser.setDefaultOption("GoStraight", loadPathplannerTrajectoryToRamseteCommand(
 //      "C:\\Users\\Laker-Programming\\FRC2023ChargedUp3\\src\\main\\deploy\\pathplanner\\generatedJSON\\Go Straight.wpilib.json",
        "pathplanner/generatedJSON/GoStraight.wpilib.json",
 true));
