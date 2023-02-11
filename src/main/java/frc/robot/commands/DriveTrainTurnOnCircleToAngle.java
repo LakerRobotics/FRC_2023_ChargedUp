@@ -4,7 +4,7 @@ import frc.robot.subsystems.utilities.AdjustAngleAsTravelHelper;
 /**
  *
  */
-public class DriveTrainTurnOnCircleToAngle extends DriveTrainMoveStraight {
+public class DriveTrainTurnOnCircleToAngle extends DriveTrainFieldOrientated {
 	protected AdjustAngleAsTravelHelper m_AdjustAngleAsTravelArcHelper;
 
  
