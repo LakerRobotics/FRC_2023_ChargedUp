@@ -262,6 +262,9 @@ differentialDrive1 = new DifferentialDrive (driveTrainGroupRight, driveTrainGrou
         boolean squareInputsToReduceSenstivityAtLowSpeeds = true;
         differentialDrive1.arcadeDrive(power, turnpower, squareInputsToReduceSenstivityAtLowSpeeds);
     }
+    public void fieldOrientationDrive(double fieldAngle, double power ){
+        
+    }
     public void tankDrive(double leftPower, double rightPower){
         differentialDrive1.tankDrive(leftPower, rightPower);
     }

@@ -52,7 +52,7 @@ public class DriveTrainFieldOrientated extends CommandBase {
     * @param ramp      in inches
     * @param targetAngle assume it want Degrees
     ------------------------------------------------*/
-   public DriveTrainFieldOrientated(DriveTrain theDriveTrain, double distance, double maxspeed, double ramp, double targetAngle){
+   public DriveTrainFieldOrientated(DriveTrain theDriveTrain){
 
         m_DriveTrain = theDriveTrain;
         addRequirements(m_DriveTrain);
@@ -62,15 +62,10 @@ public class DriveTrainFieldOrientated extends CommandBase {
      
         m_LineSource = new EncoderAvgLeftRight(m_leftEncoder, m_rightEncoder);
         m_TurnSource = m_rotationSource;
-        m_maxspeed = maxspeed;
-        m_ramp = ramp;
-        m_targetAngle = targetAngle;
-
         m_StraightTolerance = 2;
 
         // 
-        setDistance(distance);
-
+ 
 
     }
      
