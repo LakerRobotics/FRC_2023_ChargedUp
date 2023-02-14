@@ -97,9 +97,9 @@ public class DriveTrainFieldOrientated extends CommandBase {
                                                 //Test Case desired angle 90 current angle 270 then want +180
                                                 //Test Case desired angle 270 current angle 1 then want -91
             if(turnError>0){
-                turnError =  180-turnError; 
+                turnError =  360-turnError; 
             }else{ // turnAngleIsNegative
-                turnError = -180+turnError;
+                turnError = -360+turnError;
             };
         }
         double turnPower = anglePIDController.calculate(currentAngle, desiredAngle) + turnError * 1/25; /*so if 25 Degrees off, so about 1/16 or a full turn, then apply full power to turning */
