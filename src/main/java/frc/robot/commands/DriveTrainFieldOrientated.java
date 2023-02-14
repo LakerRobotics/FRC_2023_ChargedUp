@@ -5,6 +5,10 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.controller.PIDController;
+
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.utilities.AdjustSpeedAsTravelHelper;
 import frc.robot.subsystems.utilities.AdjustSpeedAsTravelMotionControlHelper;
@@ -18,111 +22,51 @@ import frc.robot.subsystems.utilities.PIDOutputStraightMotion;
 public class DriveTrainFieldOrientated extends CommandBase {
     private final DriveTrain m_DriveTrain;
 
-    RelativeEncoder m_leftEncoder; 
-    RelativeEncoder m_rightEncoder; 
     Gyro m_rotationSource;
 
-    protected EncoderAvgLeftRight m_LineSource;
 	protected Gyro m_TurnSource;
-    private double m_distance;
-    private double m_DistanceToExceed; //TODO Check if can Eliminate this redudent variable
     private double m_maxspeed;
-    private double m_ramp;
     private double m_targetAngle;
-    
-	private double m_StraightTolerance;
-	private AdjustSpeedAsTravelHelper m_AdustsSpeedAsTravelStraightHelper;
-    private PIDOutputStraightMotion    m_StraightRotationPIDOutput;
-	private MotionControlPIDController m_StraightDistancePIDController;
 
     private SimpleMotorFeedforward m_simpleMotorFeedForward;
 
-    private boolean isStraightMovingForward = true;
     public final double StraightKp = 0.006;// 0.020;
     public final double StraightKi = 0.008;//0.001;
     public final double StraightKd = 0.0;
+
+    private PIDController anglePIDController;
+    private PIDController speedPIDController;
 //    private final double StraightMaxPower = 1;
 
 /** 
     * @param theDriveTrain the drivetrain subsystem
-    * @param distanceSource the wheel encoders
-    * @param rotationSource the Gryro
-    * @param distance  to travel in inches
-    * @param maxSpeed  in ft/sec
-    * @param ramp      in inches
-    * @param targetAngle assume it want Degrees
     ------------------------------------------------*/
    public DriveTrainFieldOrientated(DriveTrain theDriveTrain){
 
         m_DriveTrain = theDriveTrain;
         addRequirements(m_DriveTrain);
-        m_leftEncoder    = theDriveTrain.getEncoderLeft();
-        m_rightEncoder   = theDriveTrain.getEncoderRight();
         m_rotationSource = theDriveTrain.getGyro();
      
-        m_LineSource = new EncoderAvgLeftRight(m_leftEncoder, m_rightEncoder);
         m_TurnSource = m_rotationSource;
-        m_StraightTolerance = 2;
-
-        // 
- 
+        m_maxspeed = maxspeed;
+        m_targetAngle = targetAngle;
 
     }
      
-    public void setDistance(double distance){
-        m_distance = distance;
-        m_DistanceToExceed = m_distance; //TODO check if can eliminate this duplicate varable
-        if(distance > 0){
-            isStraightMovingForward = true;
-        }
-        else{
-            isStraightMovingForward = false;
-        }
-
-    }
-/**
- * 
- * @param currentDistance, 
- * @return the target Angle in degree for the provided distance, note in the base drive straight this is always just the passed in straight angle
- *         but in a derived class like turn on a circle it would but updated for each distance
- */
-    protected double getTargetAngle(double currentDistance){
-        return m_targetAngle;
-    };
 
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
 	{
-        m_LineSource.reset();
-			
-		double start = 0;
-			
-		double convertedDistance = m_distance;	// Inches
+        angleStick = new Joystick(0);
+        powerStick = new Joystick(1);
+//        gyro = new ADXRS450_Gyro();
+        anglePIDController = new PIDController(0.05, 0, 0);
+        speedPIDController = new PIDController(0.1, 0, 0);
+
 		double convertedSpeed = m_maxspeed * 12; 	// Converted from Feet/Second to Inches/Second
-		double convertedRamp = m_ramp;			// Inches/Second
 			
-//		if (!(Math.abs(m_LineSource.getDistance()) > Math.abs(m_DistanceToExceed)))
-//		{
-        // TURN POWER to drive straight, Setup PID to constantly adjust the turn to follow the gyro
-		m_StraightRotationPIDOutput = new PIDOutputStraightMotion(m_DriveTrain, m_TurnSource, m_targetAngle);
-
-        // FORWARD POWER, will have two parts, a guess of the motor power needed plus PID control to try and get to actaul speed requesting
-        // so 20% min power to move (deadzone)
-        // assuming max speed robot is 13 ft/sec which 156 in/sec need to get to 100% that calculcat e0.0059rr for the second number, but it was too low
-        m_simpleMotorFeedForward = new SimpleMotorFeedforward(0.20, 0.008);//0.005944);
-
-        //Instantiates a new AdjustSpeedAsTravelMotionControlHelper() object for the driveStraightDistance we are going to traverse
-        m_AdustsSpeedAsTravelStraightHelper = new AdjustSpeedAsTravelMotionControlHelper(
-                                                        convertedDistance +(convertedDistance/java.lang.Math.abs(convertedDistance))*m_StraightTolerance// the divide by abs is to get the sign correct 
-                                                        ,convertedRamp
-                                                        ,convertedSpeed
-                                                        ,start
-                                                        ,m_LineSource/*m_StraightRotationPIDOutput*/);// Not needed to be passed in, this is don here in exeute, this is just here for historical reasons and should be eliminated
-		//Instantiates a new MotionControlPIDController() object for the new drive segment using the AdustSpeedAsTravelMotionControlHelper to very the speed
-		m_StraightDistancePIDController = new MotionControlPIDController(StraightKp, StraightKi, StraightKd, m_AdustsSpeedAsTravelStraightHelper);
-		m_StraightDistancePIDController.setTolerance(m_StraightTolerance);// there is also a setTolerance that takes position and velocity acceptable tolerance
 //		}
     }
 }
@@ -131,29 +75,40 @@ public class DriveTrainFieldOrientated extends CommandBase {
     @Override
     public void execute() {
 
+        double desiredAngle = getJoystickAngle();
+        double desiredSpeed = powerStick.getY() * 12; // convert joystick value to ft/sec
 
-        double distanceSoFar = m_LineSource.getDistance();
-        double targetSpeed   = m_AdustsSpeedAsTravelStraightHelper.getTargetSpeed(distanceSoFar);
-        double currentSpeed  = m_LineSource.getRate();
+        SmartDashboard.putNumber("Desired Angle", desiredAngle);
+        SmartDashboard.putNumber("Desired Speed", desiredSpeed);
 
-        double firstGuessAtMotorPower = m_simpleMotorFeedForward.calculate(targetSpeed);
-        double pidTuneForwardPower = m_StraightDistancePIDController.calculate(currentSpeed, targetSpeed);
-        double forwardPower = firstGuessAtMotorPower + pidTuneForwardPower;
-    
-        double angleRightNow = m_TurnSource.getAngle();
-        double targetAngle = getTargetAngle(distanceSoFar);
-        double turnPower = m_StraightRotationPIDOutput.calculate(angleRightNow,targetAngle);
-
-        m_DriveTrain.arcadeDrive(forwardPower, turnPower);
-
-        SmartDashboard.putNumber("DriveStraight Target distance", m_DistanceToExceed);
-        SmartDashboard.putNumber("DriveStraight distanceSoFar", distanceSoFar );
-        SmartDashboard.putNumber("DriveStraight targetSpeed", targetSpeed);
-        SmartDashboard.putNumber("DriveStraight currentSpeed", currentSpeed);
-        SmartDashboard.putNumber("DriveStraight forwardPower", forwardPower);
-        SmartDashboard.putNumber("DriveStraight angleRightNow", angleRightNow);
+        drive(desiredAngle, desiredSpeed);
         SmartDashboard.putNumber("DriveStraight turnPower", turnPower);
     }
+
+    private void drive(double desiredAngle, double desiredSpeed) {
+        double currentAngle = m_DriveTrain.getHeading();
+        double currentSpeed = (m_DriveTrain.getLeftEncoderVelocity()+m_DriveTrain.getRightEncoderVelocity())/2;
+
+        double turnError = desiredAngle-currentAngle;
+        if(java.lang.Math.abs(turnError) > 180){                    //Test cases desired angle 1, current angle 359, in this case want answer to be +2
+                                                //Test Case desired angle 180 current angle 0, then want 180
+                                                //Test Case desired angle 1 current angle 182 then want 179
+                                                //Test Case desired angle 1 current angle 179 then want -178
+                                                //Test Case desired angle 90 current angle 270 then want +180
+                                                //Test Case desired angle 270 current angle 1 then want -91
+            if(turnError>0){
+                turnError =  360-turnError; 
+            }else{ // turnAngleIsNegative
+                turnError = -360+turnError;
+            };
+        }
+        double turnPower = anglePIDController.calculate(currentAngle, desiredAngle) + turnError * 1/25; /*so if 25 Degrees off, so about 1/16 or a full turn, then apply full power to turning */
+        double forwardPower = speedPIDController.calculate(currentSpeed, desiredSpeed) + desiredSpeed * 0.05;
+    
+        // Drive the robot based on the desired angle and speed
+        m_DriveTrain.arcadeDrive(forwardPower, turnPower);
+      }
+
 
     // Called once the command ends or is interrupted.
     @Override
@@ -163,33 +118,6 @@ public class DriveTrainFieldOrientated extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        SmartDashboard.putNumber("Target distance", m_DistanceToExceed);
-        SmartDashboard.putNumber("Straight Tolerance", m_StraightTolerance);
-            
-        SmartDashboard.putNumber("Average Distance", m_LineSource.getDistance());
-        SmartDashboard.putNumber("Target", Math.abs(m_DistanceToExceed - m_StraightTolerance));
-    
-        boolean didExceedDistance = false;
-        if(isStraightMovingForward) {
-            // Traveling Forward
-            if (m_LineSource.getDistance() > m_DistanceToExceed) {
-                didExceedDistance = true;
-            }else {
-                didExceedDistance = false;
-            }
-        }else {
-            // Traveling Backward
-            if (m_LineSource.getDistance() < m_DistanceToExceed) {
-                didExceedDistance = true;
-            }else {
-                didExceedDistance = false;
-            }
-        }
-        if(didExceedDistance){
-            if(m_StraightDistancePIDController != null) {
-            }
-            return true;
-        }
         return false;
     }
 
@@ -200,4 +128,25 @@ public class DriveTrainFieldOrientated extends CommandBase {
 
     // END AUTOGENERATED CODE, SOURCE=ROBOTBUILDER ID=DISABLED
     }
+
+    private double getJoystickAngle() {
+        double x = RobotContainer.getInstance().getDriverController().getX(); Angle() getDriverController().getLeftY();
+        double y = RobotContainer.getInstance().getDriverController().getRightX(); /*turnpower*/
+    angleStick.getX();
+         angleStick.getY();
+    
+        //double angle =  RobotContainer.getInstance().getDriverController().getAngle()
+        double angle = Math.toDegrees(Math.atan2(y, x));
+    
+        // Handle transition from 360 to 0 degrees
+        if (angle < 0) {
+          angle += 360;
+        }
+    
+        return angle;
+      }
+    
+      private double getSpeed() {
+        return theDriveTrain.getSpeed();
+      }
 }
