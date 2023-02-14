@@ -22,23 +22,14 @@ import frc.robot.subsystems.utilities.PIDOutputStraightMotion;
 public class DriveTrainFieldOrientated extends CommandBase {
     private final DriveTrain m_DriveTrain;
 
-    RelativeEncoder m_leftEncoder; 
-    RelativeEncoder m_rightEncoder; 
     Gyro m_rotationSource;
 
-    protected EncoderAvgLeftRight m_LineSource;
 	protected Gyro m_TurnSource;
     private double m_maxspeed;
     private double m_targetAngle;
-    
-	private double m_StraightTolerance;
-	private AdjustSpeedAsTravelHelper m_AdustsSpeedAsTravelStraightHelper;
-    private PIDOutputStraightMotion    m_StraightRotationPIDOutput;
-	private MotionControlPIDController m_StraightDistancePIDController;
 
     private SimpleMotorFeedforward m_simpleMotorFeedForward;
 
-    private boolean isStraightMovingForward = true;
     public final double StraightKp = 0.006;// 0.020;
     public final double StraightKi = 0.008;//0.001;
     public final double StraightKd = 0.0;
@@ -54,31 +45,14 @@ public class DriveTrainFieldOrientated extends CommandBase {
 
         m_DriveTrain = theDriveTrain;
         addRequirements(m_DriveTrain);
-        m_leftEncoder    = theDriveTrain.getEncoderLeft();
-        m_rightEncoder   = theDriveTrain.getEncoderRight();
         m_rotationSource = theDriveTrain.getGyro();
      
-        m_LineSource = new EncoderAvgLeftRight(m_leftEncoder, m_rightEncoder);
         m_TurnSource = m_rotationSource;
         m_maxspeed = maxspeed;
         m_targetAngle = targetAngle;
 
-        m_StraightTolerance = 2;
-
-
-
     }
      
-/**
- * 
- * @param currentDistance, 
- * @return the target Angle in degree for the provided distance, note in the base drive straight this is always just the passed in straight angle
- *         but in a derived class like turn on a circle it would but updated for each distance
- */
-    protected double getTargetAngle(double currentDistance){
-        return m_targetAngle;
-    };
-
 
 
     // Called when the command is initially scheduled.
@@ -112,13 +86,27 @@ public class DriveTrainFieldOrientated extends CommandBase {
     }
 
     private void drive(double desiredAngle, double desiredSpeed) {
-        double currentAngle = gyro.getAngle();
-        double currentSpeed = getSpeed();
-        double turn = anglePIDController.calculate(currentAngle, desiredAngle) ;
-        double speed = speedPIDController.calculate(currentSpeed, desiredSpeed) + desiredSpeed * 0.05;
+        double currentAngle = m_DriveTrain.getHeading();
+        double currentSpeed = (m_DriveTrain.getLeftEncoderVelocity()+m_DriveTrain.getRightEncoderVelocity())/2;
+
+        double turnError = desiredAngle-currentAngle;
+        if(java.lang.Math.abs(turnError) > 180){                    //Test cases desired angle 1, current angle 359, in this case want answer to be +2
+                                                //Test Case desired angle 180 current angle 0, then want 180
+                                                //Test Case desired angle 1 current angle 182 then want 179
+                                                //Test Case desired angle 1 current angle 179 then want -178
+                                                //Test Case desired angle 90 current angle 270 then want +180
+                                                //Test Case desired angle 270 current angle 1 then want -91
+            if(turnError>0){
+                turnError =  180-turnError; 
+            }else{ // turnAngleIsNegative
+                turnError = -180+turnError;
+            };
+        }
+        double turnPower = anglePIDController.calculate(currentAngle, desiredAngle) + turnError * 1/25; /*so if 25 Degrees off, so about 1/16 or a full turn, then apply full power to turning */
+        double forwardPower = speedPIDController.calculate(currentSpeed, desiredSpeed) + desiredSpeed * 0.05;
     
         // Drive the robot based on the desired angle and speed
-        theDriveTrain.arcadeDrive(speed, turn);
+        m_DriveTrain.arcadeDrive(forwardPower, turnPower);
       }
 
 
