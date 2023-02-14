@@ -5,6 +5,10 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.controller.PIDController;
+
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.utilities.AdjustSpeedAsTravelHelper;
 import frc.robot.subsystems.utilities.AdjustSpeedAsTravelMotionControlHelper;
@@ -24,10 +28,7 @@ public class DriveTrainFieldOrientated extends CommandBase {
 
     protected EncoderAvgLeftRight m_LineSource;
 	protected Gyro m_TurnSource;
-    private double m_distance;
-    private double m_DistanceToExceed; //TODO Check if can Eliminate this redudent variable
     private double m_maxspeed;
-    private double m_ramp;
     private double m_targetAngle;
     
 	private double m_StraightTolerance;
@@ -41,16 +42,13 @@ public class DriveTrainFieldOrientated extends CommandBase {
     public final double StraightKp = 0.006;// 0.020;
     public final double StraightKi = 0.008;//0.001;
     public final double StraightKd = 0.0;
+
+    private PIDController anglePIDController;
+    private PIDController speedPIDController;
 //    private final double StraightMaxPower = 1;
 
 /** 
     * @param theDriveTrain the drivetrain subsystem
-    * @param distanceSource the wheel encoders
-    * @param rotationSource the Gryro
-    * @param distance  to travel in inches
-    * @param maxSpeed  in ft/sec
-    * @param ramp      in inches
-    * @param targetAngle assume it want Degrees
     ------------------------------------------------*/
    public DriveTrainFieldOrientated(DriveTrain theDriveTrain){
 
@@ -89,7 +87,7 @@ public class DriveTrainFieldOrientated extends CommandBase {
 	{
         angleStick = new Joystick(0);
         powerStick = new Joystick(1);
-        gyro = new ADXRS450_Gyro();
+//        gyro = new ADXRS450_Gyro();
         anglePIDController = new PIDController(0.05, 0, 0);
         speedPIDController = new PIDController(0.1, 0, 0);
 
@@ -103,8 +101,6 @@ public class DriveTrainFieldOrientated extends CommandBase {
     @Override
     public void execute() {
 
-            RobotContainer.getInstance().getDriverController().getLeftY() /*power*/,
-            RobotContainer.getInstance().getDriverController().getRightX() /*turnpower*/
         double desiredAngle = getJoystickAngle();
         double desiredSpeed = powerStick.getY() * 12; // convert joystick value to ft/sec
 
@@ -118,11 +114,11 @@ public class DriveTrainFieldOrientated extends CommandBase {
     private void drive(double desiredAngle, double desiredSpeed) {
         double currentAngle = gyro.getAngle();
         double currentSpeed = getSpeed();
-        double turn = anglePIDController.calculate(currentAngle, desiredAngle) + desiredAngle * 0.05;
+        double turn = anglePIDController.calculate(currentAngle, desiredAngle) ;
         double speed = speedPIDController.calculate(currentSpeed, desiredSpeed) + desiredSpeed * 0.05;
     
         // Drive the robot based on the desired angle and speed
-        driveTrain.arcadeDrive(speed, turn);
+        theDriveTrain.arcadeDrive(speed, turn);
       }
 
 
@@ -146,9 +142,12 @@ public class DriveTrainFieldOrientated extends CommandBase {
     }
 
     private double getJoystickAngle() {
-        double x = angleStick.getX();
-        double y = angleStick.getY();
+        double x = RobotContainer.getInstance().getDriverController().getX(); Angle() getDriverController().getLeftY();
+        double y = RobotContainer.getInstance().getDriverController().getRightX(); /*turnpower*/
+    angleStick.getX();
+         angleStick.getY();
     
+        //double angle =  RobotContainer.getInstance().getDriverController().getAngle()
         double angle = Math.toDegrees(Math.atan2(y, x));
     
         // Handle transition from 360 to 0 degrees
