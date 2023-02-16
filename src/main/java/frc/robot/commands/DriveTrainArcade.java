@@ -55,8 +55,8 @@ public class DriveTrainArcade extends CommandBase {
     @Override
     public void execute() {
         m_driveTrain.arcadeDrive(
-        RobotContainer.getInstance().getDriverController().getLeftY() /*power*/,
-        -RobotContainer.getInstance().getDriverController().getRightX() /*turnpower*/
+        -RobotContainer.getInstance().getDriverController().getLeftY() /*power*/,
+        RobotContainer.getInstance().getDriverController().getRightX() /*turnpower*/
         );
     }
 
