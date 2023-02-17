@@ -1,12 +1,13 @@
 package frc.robot.commands;
-import com.revrobotics.RelativeEncoder;
+//import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.controller.PIDController;
+//import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.math.controller.PIDController;
 
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
@@ -35,7 +36,7 @@ public class DriveTrainFieldOrientated extends CommandBase {
     public final double StraightKd = 0.0;
 
     private PIDController anglePIDController;
-    private PIDController speedPIDController;
+    private edu.wpi.first.math.controller.PIDController speedPIDController;
 //    private final double StraightMaxPower = 1;
 
 /** 
@@ -48,8 +49,7 @@ public class DriveTrainFieldOrientated extends CommandBase {
         m_rotationSource = theDriveTrain.getGyro();
      
         m_TurnSource = m_rotationSource;
-        m_maxspeed = maxspeed;
-        m_targetAngle = targetAngle;
+        m_maxspeed = 15; //ft/sec
 
     }
      
@@ -59,8 +59,8 @@ public class DriveTrainFieldOrientated extends CommandBase {
     @Override
     public void initialize() {
 	{
-        angleStick = new Joystick(0);
-        powerStick = new Joystick(1);
+//        angleStick = new Joystick(0);
+//        powerStick = new Joystick(1);
 //        gyro = new ADXRS450_Gyro();
         anglePIDController = new PIDController(0.05, 0, 0);
         speedPIDController = new PIDController(0.1, 0, 0);
@@ -76,16 +76,17 @@ public class DriveTrainFieldOrientated extends CommandBase {
     public void execute() {
 
         double desiredAngle = getJoystickAngle();
-        double desiredSpeed = powerStick.getY() * 12; // convert joystick value to ft/sec
+        double maxTurnPower = getJoystickAngleLength();
+        double desiredSpeed = RobotContainer.getInstance().getDriverController().getRightX() * m_maxspeed; // convert joystick value to ft/sec
 
-        SmartDashboard.putNumber("Desired Angle", desiredAngle);
-        SmartDashboard.putNumber("Desired Speed", desiredSpeed);
+        SmartDashboard.putNumber("FieldDrive Desired Angle", desiredAngle);
+        SmartDashboard.putNumber("FieldDrive max Turn Power", maxTurnPower);
+        SmartDashboard.putNumber("FieldDrive Desired Speed", desiredSpeed);
 
-        drive(desiredAngle, desiredSpeed);
-        SmartDashboard.putNumber("DriveStraight turnPower", turnPower);
+        drive(desiredAngle, maxTurnPower, desiredSpeed);
     }
 
-    private void drive(double desiredAngle, double desiredSpeed) {
+    private void drive(double desiredAngle, double maxTurnPower, double desiredSpeed) {
         double currentAngle = m_DriveTrain.getHeading();
         double currentSpeed = (m_DriveTrain.getLeftEncoderVelocity()+m_DriveTrain.getRightEncoderVelocity())/2;
 
@@ -130,10 +131,8 @@ public class DriveTrainFieldOrientated extends CommandBase {
     }
 
     private double getJoystickAngle() {
-        double x = RobotContainer.getInstance().getDriverController().getX(); Angle() getDriverController().getLeftY();
-        double y = RobotContainer.getInstance().getDriverController().getRightX(); /*turnpower*/
-    angleStick.getX();
-         angleStick.getY();
+        double x = RobotContainer.getInstance().getDriverController().getLeftX();// Angle() getDriverController().getLeftY();
+        double y = RobotContainer.getInstance().getDriverController().getLeftY(); /*turnpower*/
     
         //double angle =  RobotContainer.getInstance().getDriverController().getAngle()
         double angle = Math.toDegrees(Math.atan2(y, x));
@@ -145,8 +144,15 @@ public class DriveTrainFieldOrientated extends CommandBase {
     
         return angle;
       }
+      private double getJoystickAngleLength() {
+        double x = RobotContainer.getInstance().getDriverController().getLeftX();// Angle() getDriverController().getLeftY();
+        double y = RobotContainer.getInstance().getDriverController().getLeftY(); /*turnpower*/
+        double length = java.lang.Math.sqrt(x*x +y*y);
+        return length;
+      }
+    
     
       private double getSpeed() {
-        return theDriveTrain.getSpeed();
+        return (m_DriveTrain.getRightEncoderVelocity()+m_DriveTrain.getLeftEncoderVelocity())/2;
       }
 }
