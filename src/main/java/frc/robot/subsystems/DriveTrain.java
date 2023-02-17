@@ -28,7 +28,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
+//import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import com.analog.adis16470.frc.ADIS16470_IMU;
 //TODO want one with built in gyro so can caste so change to com.analog.adis16470.frc.ADIS16470_IMU 
 // which can be found in github https://github.com/juchong/ADIS16470-RoboRIO-Driver/blob/master/java/src/main/java/com/analog/adis16470/frc/ADIS16470_IMU.java
 // perhapes we need to do vendor install
