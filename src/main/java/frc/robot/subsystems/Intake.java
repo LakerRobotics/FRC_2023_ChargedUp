@@ -112,7 +112,7 @@ private CANSparkMax intake ;
             RobotContainer.getInstance().getOperatorController().setRumble(RumbleType.kLeftRumble,rumblePower);
             RobotContainer.getInstance().getDriverController().setRumble(  RumbleType.kLeftRumble,rumblePower);
         }
-        CANSparkMax intake = new CANSparkMax(6, MotorType.kBrushless); 
+       // CANSparkMax intake = new CANSparkMax(3, MotorType.kBrushless); 
     
     }
 
