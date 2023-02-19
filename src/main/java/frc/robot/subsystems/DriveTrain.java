@@ -33,7 +33,7 @@ import com.analog.adis16470.frc.ADIS16470_IMU;
 //TODO want one with built in gyro so can caste so change to com.analog.adis16470.frc.ADIS16470_IMU 
 // which can be found in github https://github.com/juchong/ADIS16470-RoboRIO-Driver/blob/master/java/src/main/java/com/analog/adis16470/frc/ADIS16470_IMU.java
 // perhapes we need to do vendor install
-import edu.wpi.first.wpilibj.CAN;
+//import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 
@@ -198,6 +198,10 @@ differentialDrive1 = new DifferentialDrive (driveTrainGroupRight, driveTrainGrou
         return m_encoderLeft.getVelocity();
     }
 
+    public double getSpeed(){
+        return(getLeftEncoderVelocity()+getRightEncoderVelocity())/2;
+    }
+
     public double getHeading(){
         return m_Gyro.getAngle();
     }
@@ -217,6 +221,7 @@ differentialDrive1 = new DifferentialDrive (driveTrainGroupRight, driveTrainGrou
     public DifferentialDriveWheelSpeeds getWheelSpeeds(){
         return new DifferentialDriveWheelSpeeds(getLeftEncoderVelocity(), getRightEncoderVelocity());
     }
+
 
     public void tankDriveVolts(double leftVolts, double rightVolts){
         driveTrainGroupLeft.setVoltage(leftVolts); 
@@ -245,10 +250,6 @@ differentialDrive1 = new DifferentialDrive (driveTrainGroupRight, driveTrainGrou
         m_Gyro.reset();
     }
 
-    public Gyro getGyro1(){
-        return getGyro();
-    }
-
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
@@ -274,9 +275,9 @@ differentialDrive1 = new DifferentialDrive (driveTrainGroupRight, driveTrainGrou
         boolean squareInputsToReduceSenstivityAtLowSpeeds = true;
         differentialDrive1.arcadeDrive(power, turnpower, squareInputsToReduceSenstivityAtLowSpeeds);
     }
-    public void fieldOrientationDrive(double fieldAngle, double power ){
+//    public void fieldOrientationDrive(double fieldAngle, double power ){
         
-    }
+//    }
     public void tankDrive(double leftPower, double rightPower){
         differentialDrive1.tankDrive(leftPower, rightPower);
     }

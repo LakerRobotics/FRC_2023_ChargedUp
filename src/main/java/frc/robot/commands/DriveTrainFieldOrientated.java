@@ -7,15 +7,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.XboxController;
 //import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.math.controller.PIDController;
-
+//import edu.wpi.first.math.controller.PIDController;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.utilities.AdjustSpeedAsTravelHelper;
-import frc.robot.subsystems.utilities.AdjustSpeedAsTravelMotionControlHelper;
-import frc.robot.subsystems.utilities.EncoderAvgLeftRight;
-import frc.robot.subsystems.utilities.MotionControlPIDController;
-import frc.robot.subsystems.utilities.PIDOutputStraightMotion;
 
 /**
  *
@@ -27,7 +22,6 @@ public class DriveTrainFieldOrientated extends CommandBase {
 
 	protected Gyro m_TurnSource;
     private double m_maxspeed;
-    private double m_targetAngle;
 
     private SimpleMotorFeedforward m_simpleMotorFeedForward;
 
@@ -35,8 +29,9 @@ public class DriveTrainFieldOrientated extends CommandBase {
     public final double StraightKi = 0.008;//0.001;
     public final double StraightKd = 0.0;
 
-    private PIDController anglePIDController;
-    private edu.wpi.first.math.controller.PIDController speedPIDController;
+//    private PIDController anglePIDController;
+//    private edu.wpi.first.math.controller.PIDController speedPIDController;
+    private SimpleMotorFeedforward speedFeedForwardController;
 //    private final double StraightMaxPower = 1;
 
 /** 
@@ -62,8 +57,10 @@ public class DriveTrainFieldOrientated extends CommandBase {
 //        angleStick = new Joystick(0);
 //        powerStick = new Joystick(1);
 //        gyro = new ADXRS450_Gyro();
-        anglePIDController = new PIDController(0.05, 0, 0);
-        speedPIDController = new PIDController(0.1, 0, 0);
+        speedFeedForwardController =  new SimpleMotorFeedforward(Constants.DriveTrainConstants.ksVolts, 
+                                                               Constants.DriveTrainConstants.kvVoltSecondsPerMeter,
+                                                               Constants.DriveTrainConstants.kaVoltSecondsSquaredPerMeter);
+
 
 		double convertedSpeed = m_maxspeed * 12; 	// Converted from Feet/Second to Inches/Second
 			
@@ -88,7 +85,7 @@ public class DriveTrainFieldOrientated extends CommandBase {
 
     private void drive(double desiredAngle, double maxTurnPower, double desiredSpeed) {
         double currentAngle = m_DriveTrain.getHeading();
-        double currentSpeed = (m_DriveTrain.getLeftEncoderVelocity()+m_DriveTrain.getRightEncoderVelocity())/2;
+        double currentSpeed = m_DriveTrain.getSpeed();
 
         double turnError = desiredAngle-currentAngle;
         if(java.lang.Math.abs(turnError) > 180){                    //Test cases desired angle 1, current angle 359, in this case want answer to be +2
@@ -103,9 +100,10 @@ public class DriveTrainFieldOrientated extends CommandBase {
                 turnError = -360+turnError;
             };
         }
-        double turnPower = anglePIDController.calculate(currentAngle, desiredAngle) + turnError * 1/25; /*so if 25 Degrees off, so about 1/16 or a full turn, then apply full power to turning */
-        double forwardPower = speedPIDController.calculate(currentSpeed, desiredSpeed) + desiredSpeed * 0.05;
-    
+//        double turnPower = anglePIDController.calculate(currentAngle, desiredAngle) + turnError * 1/25; /*so if 25 Degrees off, so about 1/16 or a full turn, then apply full power to turning */
+        double turnPower = - maxTurnPower *  turnError * 1/25; /*so if 25 Degrees off, so about 1/16 or a full turn, then apply full power to turning
+                                                                  use negative to turn opposit of the error to minimize */
+        double forwardPower = speedFeedForwardController.calculate(currentSpeed, desiredSpeed);
         // Drive the robot based on the desired angle and speed
         m_DriveTrain.arcadeDrive(forwardPower, turnPower);
       }
@@ -152,7 +150,5 @@ public class DriveTrainFieldOrientated extends CommandBase {
       }
     
     
-      private double getSpeed() {
-        return (m_DriveTrain.getRightEncoderVelocity()+m_DriveTrain.getLeftEncoderVelocity())/2;
-      }
+    
 }
