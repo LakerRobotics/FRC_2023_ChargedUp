@@ -31,6 +31,11 @@ public class Constants {
       public static final int kRightMotor1CANID = 20;
       public static final int kRightMotor2CANID = 1; 
       public static final int kRightMotor3CANID = 2;
+
+      //limit Current to avoid drawing batter too low & getting chatter
+      public static final int SparkMaxCurrentLimit = 30
+      ;
+
     
       //sysID values
       public static final double ksVolts = 0.2236;
@@ -39,7 +44,7 @@ public class Constants {
       public static final double kpDriveVel = 0.023927;
 
       // differential drive kinmatics
-      public static final double kTrackWidthMeters = Units.inchesToMeters(7);
+      public static final double kTrackWidthMeters = Units.inchesToMeters(24);
       public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
 
       //max velocity and accleration

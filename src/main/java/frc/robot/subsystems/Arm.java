@@ -65,7 +65,7 @@ private CANSparkMax arm;
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     public void movePower(double power){
-        //TODO fix so no runtime error:::::: arm.set(power);
+        arm.set(power*0.5);
     }
 
 }
