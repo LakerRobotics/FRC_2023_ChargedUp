@@ -115,11 +115,16 @@ private final XboxController operatorController = new XboxController(1);
       m_chooser.addOption("Test Right Turn", loadPathplannerTrajectoryToRamseteCommand(
         "pathplanner/generatedJSON/Test Right Turn.wpilib.json",
       true));
+
+      m_chooser.addOption("Forward test", loadPathplannerTrajectoryToRamseteCommand(
+        "pathplanner/generatedJSON/Forward test.wpilib.json",
+      true));
       
      m_chooser.setDefaultOption("GoStraight", loadPathplannerTrajectoryToRamseteCommand(
 //      "C:\\Users\\Laker-Programming\\FRC2023ChargedUp3\\src\\main\\deploy\\pathplanner\\generatedJSON\\Go Straight.wpilib.json",
        "pathplanner/generatedJSON/GoStraight.wpilib.json",
 true));
+
   
     Shuffleboard.getTab("Autonomous").add(m_chooser);
 
