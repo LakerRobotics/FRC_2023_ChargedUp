@@ -23,7 +23,7 @@ public class DriveTrainFieldOrientated extends CommandBase {
 	protected Gyro m_TurnSource;
     private double m_maxspeed;
 
-    private SimpleMotorFeedforward m_simpleMotorFeedForward;
+//    private SimpleMotorFeedforward m_simpleMotorFeedForward;
 
     public final double StraightKp = 0.006;// 0.020;
     public final double StraightKi = 0.008;//0.001;
@@ -62,7 +62,7 @@ public class DriveTrainFieldOrientated extends CommandBase {
                                                                Constants.DriveTrainConstants.kaVoltSecondsSquaredPerMeter);
 
 
-		double convertedSpeed = m_maxspeed * 12; 	// Converted from Feet/Second to Inches/Second
+//		double convertedSpeed = m_maxspeed * 12; 	// Converted from Feet/Second to Inches/Second
 			
 //		}
     }

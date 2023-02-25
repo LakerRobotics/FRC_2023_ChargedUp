@@ -299,6 +299,10 @@ differentialDrive1 = new DifferentialDrive (driveTrainGroupRight, driveTrainGrou
     public Gyro getGyro(){
         return (Gyro) m_Gyro;
     }
+    
+    public ADIS16470_IMU getIMU(){
+        return m_Gyro;
+    }
 
 }
 
