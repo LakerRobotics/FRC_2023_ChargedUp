@@ -76,11 +76,12 @@ public class Constants {
       public static final int HOLD_CURRENT_LIMIT_A = 5;
     }
     
-    public static final class Arm {
+    public static final class ArmConstants {
       /*** How many amps the arm motor can use.*/
-      public static final int ARM_CURRENT_LIMIT_A = 20;
+      public static final int ARM_CURRENT_LIMIT_A = 40;
       /*** Percent output to run the arm up/down at*/
       public static final double ARM_OUTPUT_POWER = 0.4;
+      public static final double ARM_OUTPUT_POWER_AUTON = 0.55;
 }
 
 

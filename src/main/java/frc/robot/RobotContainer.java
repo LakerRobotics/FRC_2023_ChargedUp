@@ -120,6 +120,12 @@ private final XboxController operatorController = new XboxController(1);
         "pathplanner/generatedJSON/Forward test.wpilib.json",
       true));
       
+      m_chooser.addOption("Place Cone", new AutonomousPlaceCone(m_intake, m_arm, m_driveTrain)
+      );
+
+      m_chooser.addOption("Place Cone and Balance", new AutonomousPlaceConeBalance(m_intake, m_arm, m_driveTrain)
+      );
+
      m_chooser.setDefaultOption("GoStraight", loadPathplannerTrajectoryToRamseteCommand(
 //      "C:\\Users\\Laker-Programming\\FRC2023ChargedUp3\\src\\main\\deploy\\pathplanner\\generatedJSON\\Go Straight.wpilib.json",
        "pathplanner/generatedJSON/GoStraight.wpilib.json",
@@ -132,7 +138,7 @@ true));
     // SmartDashboard Buttons
     //SmartDashboard.putData("AutonomousCommand", new AutonomousShootandBackupStraight(m_intake,m_shooter,m_conveyor,m_driveTrain));
     SmartDashboard.putData("DriveTrainArcade", new DriveTrainArcade( m_driveTrain ));
-    SmartDashboard.putData("IntakeMove", new IntakeConeOut( m_intake ));
+    SmartDashboard.putData("IntakeConeIn", new IntakeConeIn( m_intake ));
     SmartDashboard.putData("IntakeStop", new IntakeStop( m_intake ));
     SmartDashboard.putData("IntakeControlPower", new IntakeTeleop( m_intake ));
     SmartDashboard.putData("IntakeControlSpeed", new IntakeConeHoldStart( m_intake ));
@@ -221,7 +227,7 @@ true));
 // INTAKE 
 //final JoystickButton intakeMovePower = new JoystickButton(operatorController, XboxController.Button.kRightStick.value);        
 //intakeMovePower.whileHeld(new IntakeMove( m_intake ) ,true);
-    SmartDashboard.putData("IntakeMovePower",new IntakeConeOut( m_intake ) );
+    SmartDashboard.putData("IntakeMovePower",new IntakeConeIn( m_intake ) );
 
 // CONVEYOR
 //   Operator Controller
@@ -236,7 +242,7 @@ true));
 
 //final JoystickButton conveyorMovePowerDriverBackwards = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
                      //conveyorMovePowerDriverBackwards.whileHeld(new ConveyorMoveBackwards( m_conveyor ) ,true);
-    SmartDashboard.putData("ConveyorMovePower",new ArmControlPower( m_arm ) );
+    SmartDashboard.putData("ConveyorMovePower",new ArmControlExtend( m_arm ) );
 
 // SHOOTER Curb Shoot
 //   Operator Controlller
