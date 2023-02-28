@@ -174,3 +174,5 @@ gradlew
 gradlew.bat
 settings.gradle
 PathWeaver/PathWeaver/SysIDData/config.jsongood
+build/tmp/expandedArchives/apriltag-cpp-2023.4.2-linuxathena.zip_e627f336e4ff4d2b32d0cf5e03850409/linux/athena/shared/libapriltagjni.so
+*.so

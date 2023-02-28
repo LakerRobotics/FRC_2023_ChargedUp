@@ -71,7 +71,7 @@ public class Constants {
       public static final double INTAKE_AND_OUTPUT_POWER = 1.0;
 
       /*** Percent output for holding */
-      public static final double HOLD_POWER = 0.07;
+      public static final double HOLD_POWER = 0.1;
       /*** How many amps the intake can use while holding */
       public static final int HOLD_CURRENT_LIMIT_A = 5;
     }
@@ -86,3 +86,4 @@ public class Constants {
 
 
 }
+  
