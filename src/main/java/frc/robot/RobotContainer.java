@@ -123,7 +123,10 @@ private final XboxController operatorController = new XboxController(1);
       m_chooser.addOption("Place Cone", new AutonomousPlaceCone(m_intake, m_arm, m_driveTrain)
       );
 
-      m_chooser.addOption("Place Cone and Balance", new AutonomousPlaceConeBalance(m_intake, m_arm, m_driveTrain)
+      m_chooser.addOption("Place Cone and Balance", new AutonomousPlaceDriveBalance(m_intake, m_arm, m_driveTrain)
+      );
+
+      m_chooser.addOption("Place Drive Balance", new AutonomousPlaceDriveBalance(m_intake, m_arm, m_driveTrain)
       );
 
      m_chooser.setDefaultOption("GoStraight", loadPathplannerTrajectoryToRamseteCommand(
