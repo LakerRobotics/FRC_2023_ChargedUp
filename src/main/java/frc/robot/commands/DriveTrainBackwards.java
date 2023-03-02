@@ -55,7 +55,7 @@ public class DriveTrainBackwards extends CommandBase {
     @Override
     public void execute() {
         m_driveTrain.arcadeDrive(
-     -0.5, 0
+     -0.65, 0
         );
     }
 

@@ -37,15 +37,15 @@ addCommands(new IntakeConeIn(theIntake).withTimeout(1));
 
 addCommands(new IntakeConeHoldStart(theIntake).withTimeout(3));
 
-addCommands(new ArmControlExtend(theArm).withTimeout(1));
+addCommands(new ArmControlExtend(theArm).withTimeout(2));
 
 // Drop cone
 
-addCommands(new IntakeConeOut(theIntake).withTimeout(2));
+addCommands(new IntakeConeOut(theIntake).withTimeout(2.5));
 
 // Drive backwards
 
-addCommands(new DriveTrainBackwards(theDriveTrain).withTimeout(4));
+addCommands(new DriveTrainBackwards(theDriveTrain).withTimeout(2.5));
 
 // Balance
 
