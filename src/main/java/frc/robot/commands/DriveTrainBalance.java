@@ -69,21 +69,23 @@ public class DriveTrainBalance extends CommandBase {
 
         double max_speedFtSec = 0.02; //ft/sec
         double max_speedMeterSec = max_speedFtSec/3.28;
-        double desired_speed = percentOfMaxTilt * max_speedMeterSec;
+        //double desired_speed = percentOfMaxTilt * max_speedMeterSec;
 
-        double forwardPower = 
+        /*double forwardPower = 
         //overcome friction
         Constants.DriveTrainConstants.ksVolts * desired_speed +
         // actual power needed to move
         Constants.DriveTrainConstants.kvVoltSecondsPerMeter * desired_speed;
-        double minPower=0.3;
-        double maxPower=0.4;
+        */
+        double minPower=0.4;
+        double maxPower=0.5;
+        double forwardPower= percentOfMaxTilt/Math.abs(percentOfMaxTilt)*minPower+(maxPower-minPower)*percentOfMaxTilt;
         // if tilt is greater than 5 then set motors to minPower.
-        if(Math.abs(tilt)>5){
+        /*if(Math.abs(tilt)>6){
             if (Math.abs(forwardPower)<minPower){
                 forwardPower=(forwardPower/Math.abs(forwardPower))*minPower;
             }
-        }
+        }*/
         // check if forward power is greater than the max power then set the forward power to the max power.
 
 

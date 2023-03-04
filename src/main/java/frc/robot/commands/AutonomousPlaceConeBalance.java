@@ -35,21 +35,25 @@ addCommands(new IntakeConeIn(theIntake).withTimeout(1));
 
 // Extend arm 
 
-addCommands(new IntakeConeHoldStart(theIntake).withTimeout(3));
+addCommands(new IntakeConeHoldStart(theIntake).withTimeout(1));
 
-addCommands(new ArmControlExtend(theArm).withTimeout(2));
+addCommands(new ArmControlExtend(theArm).withTimeout(3));
 
 // Drop cone
 
-addCommands(new IntakeConeOut(theIntake).withTimeout(2.5));
+addCommands(new IntakeConeOut(theIntake).withTimeout(2));
+
+// Retract arm
+
+addCommands(new ArmControlRetract(theArm).withTimeout(3));
 
 // Drive backwards
 
-addCommands(new DriveTrainBackwards(theDriveTrain).withTimeout(2.5));
+addCommands(new DriveTrainBackwards(theDriveTrain).withTimeout(1.5));
 
 // Balance
 
-addCommands(new DriveTrainBalance(theDriveTrain).withTimeout(6));
+addCommands(new DriveTrainBalance(theDriveTrain).withTimeout(4.5));
 
     //TODO create a startShooterLow command (so it will keep running, all during auton) and 
         //TODO create a StartIntake command

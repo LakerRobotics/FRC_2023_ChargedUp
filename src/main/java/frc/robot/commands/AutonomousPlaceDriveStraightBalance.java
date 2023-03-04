@@ -43,13 +43,21 @@ addCommands(new ArmControlExtend(theArm).withTimeout(3));
 
 addCommands(new IntakeConeOut(theIntake).withTimeout(1));
 
+// Retract arm
+
+addCommands(new ArmControlRetract(theArm).withTimeout(3));
+
+
 // Drive backwards
 
 //addCommands(new DriveTrainBackwards(theDriveTrain).withTimeout(2.5));
 addCommands(new DriveTrainMoveStraight(theDriveTrain,
-                                         -99.8 /*Distance*/,
-                                        7 /*maxSpeed ft/sec*/,
-                                        20 /*inch to get to maxSpeed*/,
+                                         //-0.47= one rotation of the wheel 
+                                         // distance traveled for one full rotation of the wheel 18.84 inche
+                                         -160/*THIS IS DISTANCE TRAVELED IN INCHES*/*(0.47/18.84)
+                                         /*Distance to the center of the chargin station 99.8 Inches*/,
+                                        6 /*maxSpeed ft/sec*/,
+                                        20*(0.47/18.84) /*inch to get to maxSpeed*/,
                                         0 /*Angle to drive straight on*/
                                       )
 );
