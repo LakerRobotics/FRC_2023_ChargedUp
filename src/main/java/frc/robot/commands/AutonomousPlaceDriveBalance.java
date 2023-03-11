@@ -49,15 +49,15 @@ addCommands(new ArmControlRetract(theArm).withTimeout(3));
 
 // Drive backwards
 
-addCommands(new DriveTrainBackwards(theDriveTrain).withTimeout(3));
+addCommands(new DriveTrainBackwards(theDriveTrain).withTimeout(2));
 
 // Drive Fowards
 
-addCommands(new DriveTrainFowards(theDriveTrain).withTimeout(1.25));
+//addCommands(new DriveTrainFowards(theDriveTrain).withTimeout(1.25));
 
 // Balance
 
-addCommands(new DriveTrainBalance(theDriveTrain).withTimeout(6));
+//addCommands(new DriveTrainBalance(theDriveTrain).withTimeout(6));
 
     //TODO create a startShooterLow command (so it will keep running, all during auton) and 
         //TODO create a StartIntake command

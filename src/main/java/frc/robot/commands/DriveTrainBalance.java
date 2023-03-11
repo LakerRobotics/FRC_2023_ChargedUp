@@ -77,9 +77,9 @@ public class DriveTrainBalance extends CommandBase {
         // actual power needed to move
         Constants.DriveTrainConstants.kvVoltSecondsPerMeter * desired_speed;
         */
-        double minPower=0.4;
-        double maxPower=0.5;
-        double forwardPower= percentOfMaxTilt/Math.abs(percentOfMaxTilt)*minPower+(maxPower-minPower)*percentOfMaxTilt;
+        double minPower=0.25;
+        double maxPower=0.3;
+        double forwardPower= percentOfMaxTilt/Math.abs(percentOfMaxTilt)*minPower;
         // if tilt is greater than 5 then set motors to minPower.
         /*if(Math.abs(tilt)>6){
             if (Math.abs(forwardPower)<minPower){

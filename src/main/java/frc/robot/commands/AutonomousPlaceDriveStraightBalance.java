@@ -56,9 +56,9 @@ addCommands(new DriveTrainMoveStraight(theDriveTrain,
                                          // distance traveled for one full rotation of the wheel 18.84 inche
                                          -160/*THIS IS DISTANCE TRAVELED IN INCHES*/*(0.47/18.84)
                                          /*Distance to the center of the chargin station 99.8 Inches*/,
-                                        6 /*maxSpeed ft/sec*/,
+                                        5 /*maxSpeed ft/sec*/,
                                         20*(0.47/18.84) /*inch to get to maxSpeed*/,
-                                        0 /*Angle to drive straight on*/
+                                        theDriveTrain.getHeading() /*Angle to drive straight on*/
                                       )
 );
 
