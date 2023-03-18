@@ -249,16 +249,21 @@ private final XboxController operatorController = new XboxController(1);
 //   Driver Controller
 
 final JoystickButton driveTrainLockButton = new JoystickButton(driverController, XboxController.Button.kX.value);        
-                     driveTrainLockButton.whileHeld(new DriveTrainLock(m_driveTrain) ,true);
+                     driveTrainLockButton.whileTrue(new DriveTrainLock(m_driveTrain));
 
 //final JoystickButton conveyorMovePowerDriverBackwards = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
                      //conveyorMovePowerDriverBackwards.whileHeld(new ConveyorMoveBackwards( m_conveyor ) ,true);
-    SmartDashboard.putData("ConveyorMovePower",new ArmControlExtend( m_arm ) );
+    SmartDashboard.putData("ArmMovePower",new ArmControlExtend( m_arm ) );
 
-// SHOOTER Curb Shoot
+
 //   Operator Controlller
-//final JoystickButton shooterMovePowerShort = new JoystickButton(operatorController, XboxController.Button.kA.value);        
-                     //shooterMovePowerShort.whileHeld(new ShooterMoveLow( m_shooter ) ,true);
+final JoystickButton armHighButton = new JoystickButton(operatorController, XboxController.Button.kY.value);        
+                     armHighButton.whileTrue(new ArmControlHighPosition( m_arm ));
+final JoystickButton armMidButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
+                     armMidButton.whileTrue(new ArmControlMidPosition( m_arm ));
+final JoystickButton armStowButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+                     armStowButton.whileTrue(new ArmControlStowedPosition( m_arm ));
+
 //   Driver Controller
 //        same as Operator
 //final JoystickButton shooterMovePowerShortDriver = new JoystickButton(driverController, XboxController.Button.kA.value);        
