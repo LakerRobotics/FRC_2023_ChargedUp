@@ -11,6 +11,7 @@
 // ROBOTBUILDER TYPE: Command.
 
 package frc.robot.commands;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 //import frc.robot.Constants;
 //import frc.robot.RobotContainer;
@@ -76,12 +77,15 @@ public class DriveTrainLock extends CommandBase {
         double leftError= currentPositionLeft - lockPositionLeft;
         double rightError= currentPositionRight - lockPositionRight;
 
-        double distanceTo100PercentPower = 4; // in inches
+        double distanceTo100PercentPower = 20; // in inches
         double proportion = distanceTo100PercentPower/(6*3.14/10.4); //where  one full rotation is 6*3.14, and it take 10.4 rotation to make wheel one full rotation
         double leftPower = -leftError*proportion; // Error shoudl be in motor rotations, gear ratio is about 10 to 1, wheels are 6 inches, so one rotaiton = circumfrant of 3.14*6 or about 18" so if we want it to stay put and max power at 4 incehes so 4/18 = 1/4.5 and if 10 rotatin then 10/4.5 or to make math easy 10/5 or 2
         double rightPower = -rightError*proportion;
         
-
+        SmartDashboard.putNumber("Lock Left Position", currentPositionLeft);
+        SmartDashboard.putNumber("Lock Right Position", currentPositionRight);
+        SmartDashboard.putNumber("Lock Power Left", leftPower);
+        SmartDashboard.putNumber("Lock Power Right", rightPower);
 //        double avgError= leftError + rightError/2;
 
 //        double forwardPower= -avgError;
@@ -94,7 +98,7 @@ public class DriveTrainLock extends CommandBase {
         // check if forward power is greater than the max power then set the forward power to the max power.
 
 
-        m_driveTrain.tankDrive(leftPower,rightPower);
+        m_driveTrain.tankDrive(rightPower,leftPower);
 //        double turnPower = 0; //MAY DO if not going straight Up then add some control on turn power.
 //        m_driveTrain.arcadeDrive(
 //            forwardPower /*power*/,

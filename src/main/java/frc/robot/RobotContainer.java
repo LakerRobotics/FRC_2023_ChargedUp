@@ -144,6 +144,8 @@ private final XboxController operatorController = new XboxController(1);
     // SmartDashboard Buttons
     //SmartDashboard.putData("AutonomousCommand", new AutonomousShootandBackupStraight(m_intake,m_shooter,m_conveyor,m_driveTrain));
     SmartDashboard.putData("DriveTrainArcade", new DriveTrainArcade( m_driveTrain ));
+    SmartDashboard.putData("DriveTrainLock", new DriveTrainLock(m_driveTrain));
+    SmartDashboard.putData("DriveTrainFieldOrented", new DriveTrainFieldOrientated(m_driveTrain));
     SmartDashboard.putData("IntakeConeIn", new IntakeConeIn( m_intake ));
     SmartDashboard.putData("IntakeStop", new IntakeStop( m_intake ));
     SmartDashboard.putData("IntakeTeleop", new IntakeTeleop( m_intake ));

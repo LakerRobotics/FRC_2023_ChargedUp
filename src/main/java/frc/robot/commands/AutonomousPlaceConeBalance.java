@@ -53,7 +53,9 @@ addCommands(new DriveTrainBackwards(theDriveTrain).withTimeout(1.5));
 
 // Balance
 
-addCommands(new DriveTrainBalance(theDriveTrain).withTimeout(4.5));
+addCommands(new DriveTrainBalance(theDriveTrain));
+
+addCommands (new DriveTrainLock(theDriveTrain));
 
     //TODO create a startShooterLow command (so it will keep running, all during auton) and 
         //TODO create a StartIntake command
