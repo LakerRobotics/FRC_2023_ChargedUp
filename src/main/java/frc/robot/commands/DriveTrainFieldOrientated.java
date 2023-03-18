@@ -101,8 +101,9 @@ public class DriveTrainFieldOrientated extends CommandBase {
             };
         }
 //        double turnPower = anglePIDController.calculate(currentAngle, desiredAngle) + turnError * 1/25; /*so if 25 Degrees off, so about 1/16 or a full turn, then apply full power to turning */
-        double turnPower = - maxTurnPower *  turnError * 1/25; /*so if 25 Degrees off, so about 1/16 or a full turn, then apply full power to turning
-                                                                  use negative to turn opposit of the error to minimize */
+        double turnPower =  maxTurnPower *  turnError * 1/25; /*so if 25 Degrees off, so about 1/16 or a full turn, then apply full power to turning
+                                                                  NO negative because one test it just spun in circles so perhapes gyro rate and turn power are already opposit each other
+                                                                  (had had negative turnPower but one testit just spun in circles)*/
         double forwardPower = speedFeedForwardController.calculate(currentSpeed, desiredSpeed);
         // Drive the robot based on the desired angle and speed
         m_DriveTrain.arcadeDrive(forwardPower, turnPower);
