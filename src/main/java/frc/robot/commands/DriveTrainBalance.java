@@ -11,6 +11,7 @@
 // ROBOTBUILDER TYPE: Command.
 
 package frc.robot.commands;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 //import frc.robot.RobotContainer;
@@ -65,7 +66,9 @@ public class DriveTrainBalance extends CommandBase {
                                                       // potential replacement code for th IMU, but does not implement gyro so suld need to be adapted to simply plug in as gyro
                                                       //   https://github.com/Greater-Rochester-Robotics/SwerveBase2023/blob/main/src/main/java/frc/robot/subsystems/ADIS16470_IMU.java
                                                       //   described: https://www.chiefdelphi.com/t/reading-the-pitch-rate-of-the-16470-imu/425010/6
+        //
         double percentOfMaxTilt = tilt/5; // tilt should maximum be 34 Degrees
+         SmartDashboard.putNumber("DriveTrainBalance Tilt", tilt);
 
         double max_speedFtSec = 0.02; //ft/sec
         double max_speedMeterSec = max_speedFtSec/3.28;
@@ -77,15 +80,16 @@ public class DriveTrainBalance extends CommandBase {
         // actual power needed to move
         Constants.DriveTrainConstants.kvVoltSecondsPerMeter * desired_speed;
         */
-        double minPower=0.4;
-        double maxPower=0.5;
-        double forwardPower= percentOfMaxTilt/Math.abs(percentOfMaxTilt)*minPower+(maxPower-minPower)*percentOfMaxTilt;
+        double minPower=0.35;
+        double maxPower=0.45;
+        double forwardPower;
         // if tilt is greater than 5 then set motors to minPower.
-        /*if(Math.abs(tilt)>6){
-            if (Math.abs(forwardPower)<minPower){
-                forwardPower=(forwardPower/Math.abs(forwardPower))*minPower;
-            }
-        }*/
+        if(Math.abs(tilt)<5){
+            forwardPower=0;
+        }
+        else{
+            forwardPower= percentOfMaxTilt/Math.abs(percentOfMaxTilt)*minPower;  
+        }
         // check if forward power is greater than the max power then set the forward power to the max power.
 
 

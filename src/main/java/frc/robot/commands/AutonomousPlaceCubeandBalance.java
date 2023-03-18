@@ -25,23 +25,23 @@ import frc.robot.subsystems.Intake;
 /**
  *
  */
-public class AutonomousPlaceDriveBalance extends SequentialCommandGroup {
+public class AutonomousPlaceCubeandBalance extends SequentialCommandGroup {
 
-    public AutonomousPlaceDriveBalance(Intake theIntake, Arm theArm, DriveTrain theDriveTrain){
+    public AutonomousPlaceCubeandBalance(Intake theIntake, Arm theArm, DriveTrain theDriveTrain){
 
 // Pick up cone
 
-addCommands(new IntakeConeIn(theIntake).withTimeout(1));
+//addCommands(new IntakeCubeIn(theIntake).withTimeout(1));
 
 // Extend arm 
 
-addCommands(new IntakeConeHoldStart(theIntake).withTimeout(1));
+addCommands(new IntakeCubeHoldStart(theIntake).withTimeout(1));
 
 addCommands(new ArmControlExtend(theArm).withTimeout(3));
 
 // Drop cone
 
-addCommands(new IntakeConeOut(theIntake).withTimeout(2));
+addCommands(new IntakeCubeOut(theIntake).withTimeout(2));
 
 // Retract arm
 
@@ -57,7 +57,7 @@ addCommands(new DriveTrainBackwards(theDriveTrain).withTimeout(2));
 
 // Balance
 
-//addCommands(new DriveTrainBalance(theDriveTrain).withTimeout(6));
+addCommands(new DriveTrainBalance(theDriveTrain).withTimeout(6));
 
     //TODO create a startShooterLow command (so it will keep running, all during auton) and 
         //TODO create a StartIntake command

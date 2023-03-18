@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -130,6 +131,9 @@ private final XboxController operatorController = new XboxController(1);
       );
 
       m_chooser.addOption("Place Drive Straight and Balance", new AutonomousPlaceDriveStraightBalance(m_intake, m_arm, m_driveTrain)
+      );
+
+      m_chooser.addOption("Place Cube and Balance", new AutonomousPlaceCubeandBalance(m_intake, m_arm, m_driveTrain)
       );
 
 
@@ -244,8 +248,8 @@ private final XboxController operatorController = new XboxController(1);
                      //conveyorMovePowerBackwards.whileHeld(new ConveyorMoveBackwards( m_conveyor ) ,true);
 //   Driver Controller
 
-//final JoystickButton conveyorMovePowerDriver = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);        
-                     //conveyorMovePowerDriver.whileHeld(new ConveyorMove( m_conveyor ) ,true);
+final JoystickButton driveTrainLockButton = new JoystickButton(driverController, XboxController.Button.kX.value);        
+                     driveTrainLockButton.whileHeld(new DriveTrainLock(m_driveTrain) ,true);
 
 //final JoystickButton conveyorMovePowerDriverBackwards = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
                      //conveyorMovePowerDriverBackwards.whileHeld(new ConveyorMoveBackwards( m_conveyor ) ,true);
