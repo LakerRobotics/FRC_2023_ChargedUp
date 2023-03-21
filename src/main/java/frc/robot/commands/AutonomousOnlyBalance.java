@@ -9,8 +9,7 @@
 // it from being updated in the future.
 
 package frc.robot.commands;
-import edu.wpi.first.wpilibj2.command.CommandGroupBase;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+//import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ArmConstants;
@@ -26,46 +25,44 @@ import frc.robot.subsystems.Intake;
 /**
  *
  */
-public class AutonomousPlaceConeBalance extends SequentialCommandGroup {
+public class AutonomousOnlyBalance extends SequentialCommandGroup {
 
-    public AutonomousPlaceConeBalance(Intake theIntake, Arm theArm, DriveTrain theDriveTrain){
+    public AutonomousOnlyBalance(Intake theIntake, Arm theArm, DriveTrain theDriveTrain){
 
+// Drive backwards
 
-        // Pick up cone
-        addCommands(new IntakeConeIn(theIntake).withTimeout(0.25));
+//addCommands(new DriveTrainBackwards(theDriveTrain).withTimeout(2.5));
+addCommands(new DriveTrainMoveStraight(theDriveTrain,
+                                         //-0.47= one rotation of the wheel 
+                                         // distance traveled for one full rotation of the wheel 18.84 inche
+                                         -180/*THIS IS DISTANCE TRAVELED IN INCHES*/*(0.47/18.84)
+                                         /*Distance to the center of the chargin station 99.8 Inches*/,
+                                        4 /*maxSpeed ft/sec*/,
+                                        20*(0.47/18.84) /*inch to get to maxSpeed*/,
+                                        theDriveTrain.getHeading() /*Angle to drive straight on*/
+                                      )
+);
 
-        // Extend arm and secure cone
-        ParallelCommandGroup extendArmWhileSecuringCone = new ParallelCommandGroup(
-            new ArmControlExtend(theArm).withTimeout(3),
-            new SequentialCommandGroup(
-                new IntakeConeIn(theIntake).withTimeout(0.75),
-                new IntakeConeHoldStart(theIntake).withTimeout(0.1)
-            )
-        );
-        addCommands(extendArmWhileSecuringCone);
+addCommands(new DriveTrainMoveStraight(theDriveTrain,
+                                         //-0.47= one rotation of the wheel 
+                                         // distance traveled for one full rotation of the wheel 18.84 inche
+                                         65/*THIS IS DISTANCE TRAVELED IN INCHES*/*(0.47/18.84)
+                                         /*Distance to the center of the chargin station 99.8 Inches*/,
+                                        4 /*maxSpeed ft/sec*/,
+                                        20*(0.47/18.84) /*inch to get to maxSpeed*/,
+                                        theDriveTrain.getHeading() /*Angle to drive straight on*/
+                                      )
+);
 
-        // Drop cone
-        addCommands(new IntakeConeOut(theIntake).withTimeout(2));
-
-        // Retract arm
-        ParallelCommandGroup retractArmWhileDrivingBackwards = new ParallelCommandGroup(
-            new ArmControlRetract(theArm).withTimeout(3),
-            new DriveTrainBackwards(theDriveTrain).withTimeout(2)
-        );
-        addCommands(retractArmWhileDrivingBackwards);
-
-        // Balance
-        addCommands(new DriveTrainBalance(theDriveTrain));
-
-        addCommands (new DriveTrainLock(theDriveTrain));
-    }
 // Drive Fowards
 
-//addCommands(new DriveTrainFowards(theDriveTrain).withTimeout(1.25));
+//addCommands(new DriveTrainFowards(theDriveTrain).withTimeout(1.5));
 
 // Balance
 
-//addCommands(new DriveTrainBalance(theDriveTrain).withTimeout(6));
+addCommands(new DriveTrainBalance(theDriveTrain));
+
+addCommands (new DriveTrainLock(theDriveTrain));
 
     //TODO create a startShooterLow command (so it will keep running, all during auton) and 
         //TODO create a StartIntake command
@@ -136,3 +133,4 @@ public class AutonomousPlaceConeBalance extends SequentialCommandGroup {
 
 
 
+}

@@ -147,7 +147,7 @@ public class DriveTrainMoveStraight extends CommandBase {
     
         double angleRightNow = m_TurnSource.getAngle();
         double targetAngle = getTargetAngle(distanceSoFar);
-        double turnPower = m_StraightRotationPIDOutput.calculate(angleRightNow,targetAngle);
+        double turnPower = -m_StraightRotationPIDOutput.calculate(angleRightNow,targetAngle);
 
         m_DriveTrain.arcadeDrive(forwardPower, turnPower);
 

@@ -58,6 +58,7 @@ public class DriveTrainBalance extends CommandBase {
     public void initialize() {
         m_IMU.getXFilteredAccelAngle();
      
+        isBalanced=false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.

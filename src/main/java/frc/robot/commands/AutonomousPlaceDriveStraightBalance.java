@@ -54,9 +54,9 @@ addCommands(new ArmControlRetract(theArm).withTimeout(3));
 addCommands(new DriveTrainMoveStraight(theDriveTrain,
                                          //-0.47= one rotation of the wheel 
                                          // distance traveled for one full rotation of the wheel 18.84 inche
-                                         -160/*THIS IS DISTANCE TRAVELED IN INCHES*/*(0.47/18.84)
+                                         -65/*THIS IS DISTANCE TRAVELED IN INCHES*/*(0.47/18.84)
                                          /*Distance to the center of the chargin station 99.8 Inches*/,
-                                        5 /*maxSpeed ft/sec*/,
+                                        4 /*maxSpeed ft/sec*/,
                                         20*(0.47/18.84) /*inch to get to maxSpeed*/,
                                         theDriveTrain.getHeading() /*Angle to drive straight on*/
                                       )
@@ -69,7 +69,9 @@ addCommands(new DriveTrainMoveStraight(theDriveTrain,
 
 // Balance
 
-addCommands(new DriveTrainBalance(theDriveTrain).withTimeout(6));
+addCommands(new DriveTrainBalance(theDriveTrain));
+
+addCommands (new DriveTrainLock(theDriveTrain));
 
     //TODO create a startShooterLow command (so it will keep running, all during auton) and 
         //TODO create a StartIntake command
