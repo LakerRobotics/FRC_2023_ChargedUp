@@ -58,11 +58,11 @@ public class ArmControlMidPosition extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double highPosition=0.65;
-        m_Arm.setPosition(highPosition);
-        if(java.lang.Math.abs((m_Arm.getPosition()-highPosition)/highPosition) < 0.1){
+        double midPosition=0.25;
+        m_Arm.setPosition(midPosition);
+        if(java.lang.Math.abs((m_Arm.getPosition()-midPosition)/midPosition) < 0.1){
             // Rumble power is 66% subtract 6.6% for every 1% off of the target position, so will be at less then max rumbel when at position
-            double rumblePower = 66-6.6*java.lang.Math.abs((m_Arm.getPosition()-highPosition)/highPosition);
+            double rumblePower = 66-6.6*java.lang.Math.abs((m_Arm.getPosition()-midPosition)/midPosition);
             RobotContainer.getInstance().getOperatorController().setRumble(RumbleType.kRightRumble,rumblePower);
             RobotContainer.getInstance().getDriverController().setRumble(  RumbleType.kRightRumble,rumblePower);
         }

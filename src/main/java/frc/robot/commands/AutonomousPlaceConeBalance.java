@@ -10,6 +10,7 @@
 
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ArmConstants;
@@ -29,33 +30,40 @@ public class AutonomousPlaceConeBalance extends SequentialCommandGroup {
 
     public AutonomousPlaceConeBalance(Intake theIntake, Arm theArm, DriveTrain theDriveTrain){
 
-// Pick up cone
 
-addCommands(new IntakeConeIn(theIntake).withTimeout(1));
+        // Pick up cone
+        addCommands(new IntakeConeIn(theIntake).withTimeout(0.25));
 
-// Extend arm 
+        // Extend arm and secure cone
+        ParallelCommandGroup extendArmWhileSecuringCone = new ParallelCommandGroup(
+            new ArmControlExtend(theArm).withTimeout(3),
+            new SequentialCommandGroup(
+                new IntakeConeIn(theIntake).withTimeout(0.75),
+                new IntakeConeHoldStart(theIntake).withTimeout(0.1)
+            )
+        );
+        addCommands(extendArmWhileSecuringCone);
 
-addCommands(new IntakeConeHoldStart(theIntake).withTimeout(1));
+        // Drop cone
+        addCommands(new IntakeConeOut(theIntake).withTimeout(2));
 
-addCommands(new ArmControlExtend(theArm).withTimeout(3));
+        // Retract arm
+        ParallelCommandGroup retractArmWhileDrivingBackwards = new ParallelCommandGroup(
+            new ArmControlRetract(theArm).withTimeout(3),
+            new DriveTrainBackwards(theDriveTrain).withTimeout(2)
+        );
+        addCommands(retractArmWhileDrivingBackwards);
 
-// Drop cone
+        // Balance
+        addCommands(new DriveTrainBalance(theDriveTrain).withTimeout(6));
+    }
+// Drive Fowards
 
-addCommands(new IntakeConeOut(theIntake).withTimeout(2));
-
-// Retract arm
-
-addCommands(new ArmControlRetract(theArm).withTimeout(3));
-
-// Drive backwards
-
-addCommands(new DriveTrainBackwards(theDriveTrain).withTimeout(1.5));
+//addCommands(new DriveTrainFowards(theDriveTrain).withTimeout(1.25));
 
 // Balance
 
-addCommands(new DriveTrainBalance(theDriveTrain));
-
-addCommands (new DriveTrainLock(theDriveTrain));
+//addCommands(new DriveTrainBalance(theDriveTrain).withTimeout(6));
 
     //TODO create a startShooterLow command (so it will keep running, all during auton) and 
         //TODO create a StartIntake command
@@ -126,4 +134,3 @@ addCommands (new DriveTrainLock(theDriveTrain));
 
 
 
-}

@@ -58,7 +58,7 @@ public class ArmControlStowedPosition extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double retractedPosition=0.330;
+        double retractedPosition=0.05;
         m_Arm.setPosition(retractedPosition);
         if(java.lang.Math.abs((m_Arm.getPosition()-retractedPosition)/retractedPosition) < 0.1){
             // Rumble power is 100% subtract 10% for every 1% off of the target position, so will be at max rumbel when at position
