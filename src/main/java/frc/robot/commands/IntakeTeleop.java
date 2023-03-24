@@ -60,8 +60,10 @@ public class IntakeTeleop extends CommandBase {
     @Override
     public void execute() {
       // set Power to the maximum specified by the operator controller or the driver controller
-      boolean intakeCubeOutputCone = RobotContainer.getInstance().getOperatorController().getR1ButtonPressed() ;
-      boolean intakeConeOutputCube = RobotContainer.getInstance().getOperatorController().getL1ButtonPressed();
+      boolean intakeCubeOutputCone = RobotContainer.getInstance().getOperatorController().getL1ButtonPressed() ;
+      boolean intakeConeOutputCube = RobotContainer.getInstance().getOperatorController().getR1ButtonPressed();
+      double outputCubeManualPower= RobotContainer.getInstance().getOperatorController().getL2Axis();
+      double outputConeManualPower= RobotContainer.getInstance().getOperatorController().getR2Axis();
 
       if (intakeCubeOutputCone) {
       // cube in or cone out
@@ -73,15 +75,24 @@ public class IntakeTeleop extends CommandBase {
         m_intake.intakeCone();
         lastGamePiece = CONE;
       }
+
+      else if(outputConeManualPower>0.01){
+       m_intake.outputConeManualPower(outputConeManualPower);  
+              lastGamePiece=NOTHING;
+      }  
+      else if(outputCubeManualPower>0.01){
+
+       m_intake.outputCubeManualPower(outputConeManualPower);
+        lastGamePiece=NOTHING;
+      }
+
       else if (lastGamePiece == CUBE) {
         m_intake.holdCube();
       }
       else if (lastGamePiece == CONE) {
          m_intake.holdCone();
       }
-      else {
-        m_intake.stop();
-      }  
+     
     }
 
     // Called once the command ends or is interrupted.

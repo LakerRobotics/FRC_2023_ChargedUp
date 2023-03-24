@@ -81,8 +81,18 @@ private CANSparkMax intakeSpark;
         intakeSpark.set(-Constants.Intake.INTAKE_AND_OUTPUT_POWER);
     }
     public void outputCube(){
-        intakeCone();
+        intakeSpark.setSmartCurrentLimit(Constants.Intake.INTAKE_CURRENT_LIMIT_A);
+        intakeSpark.set(-Constants.Intake.INTAKE_AND_OUTPUT_POWER);
     }
+    public void outputCubeManualPower(double power) {
+        intakeSpark.set(-power);
+    }
+    public void outputConeManualPower(double power) {
+        intakeSpark.set(-power);
+    }
+    
+
+
 
     public void holdCube(){
         intakeSpark.setSmartCurrentLimit(Constants.Intake.HOLD_CURRENT_LIMIT_A);
