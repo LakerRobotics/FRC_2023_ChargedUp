@@ -16,9 +16,8 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -27,14 +26,11 @@ import frc.robot.Constants;
 public class Arm extends SubsystemBase {
     private CANSparkMax arm;
     private AbsoluteEncoder encoder;
-    private SparkMaxPIDController pidController;
+    private edu.wpi.first.math.controller.PIDController pidController;
 
     private final double kP = 0.01;
     private final double kI = 0.0001;
     private final double kD = 0.0;
-    private final double kFF = 0.0;
-    private final double kMaxOutput = 1.0;
-    private final double kMinOutput = -1.0;
 
     public Arm() {
         arm = new CANSparkMax(15, MotorType.kBrushless);
@@ -43,27 +39,20 @@ public class Arm extends SubsystemBase {
         arm.restoreFactoryDefaults();
         
         encoder = arm.getAbsoluteEncoder(Type.kDutyCycle);
-        pidController = arm.getPIDController();
+        pidController = new PIDController(kP, kI, kD);
 
         // Set position conversion factor for the encoder
-        encoder.setPositionConversionFactor(1);
+//        encoder.setPositionConversionFactor(1);
 
         // Invert the encoder if necessary
-        encoder.setInverted(false);
-
-        pidController.setFeedbackDevice(encoder);
-        pidController.setP(kP);
-        pidController.setI(kI);
-        pidController.setD(kD);
-        pidController.setFF(kFF);
-        pidController.setOutputRange(kMinOutput, kMaxOutput);
+//        encoder.setInverted(false);
         
         // Save the arm configuration
         arm.burnFlash();
     }
 
     public void setPosition(double targetPosition) {
-        pidController.setReference(targetPosition, ControlType.kPosition);
+        pidController.setSetpoint(targetPosition);
     }
 
     public double getPosition() {
@@ -73,6 +62,8 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        double output = pidController.calculate(getPosition());
+        arm.set(output);
         SmartDashboard.putNumber("ArmPosition", getPosition());
     }
 
