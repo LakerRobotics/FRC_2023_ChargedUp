@@ -87,7 +87,7 @@ public class DriveTrainBalance extends CommandBase {
        //double maxPower=0.45;
         double forwardPower;
         // if tilt is greater than 5 then set motors to minPower.
-        if(Math.abs(tilt)<6){
+        if(Math.abs(tilt)<10){
             forwardPower=0;
             isBalanced=true;
         }
