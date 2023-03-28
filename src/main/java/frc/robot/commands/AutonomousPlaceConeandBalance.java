@@ -30,29 +30,29 @@ import frc.robot.subsystems.Intake;
 /**
  *
  */
-public class AutonomousPlaceCubeandBalance extends SequentialCommandGroup {
+public class AutonomousPlaceConeandBalance extends SequentialCommandGroup {
 
-    public AutonomousPlaceCubeandBalance(Intake theIntake, Arm theArm, DriveTrain theDriveTrain){
+    public AutonomousPlaceConeandBalance(Intake theIntake, Arm theArm, DriveTrain theDriveTrain){
 
 // Pick up cone
 
-//addCommands(new IntakeCubeIn(theIntake).withTimeout(1));
+//addCommands(new IntakeConeIn(theIntake).withTimeout(1));
 
         // Pick up cone
-        addCommands(new IntakeCubeIn(theIntake).withTimeout(0.25));
+        addCommands(new IntakeConeIn(theIntake).withTimeout(0.25));
 
         // Extend arm and secure cone
         ParallelCommandGroup extendArmWhileSecuringCone = new ParallelCommandGroup(
             new ArmControlExtend(theArm).withTimeout(2),
             new SequentialCommandGroup(
-                new IntakeCubeIn(theIntake).withTimeout(0.75),
-                new IntakeCubeHoldStart(theIntake).withTimeout(0.1)
+                new IntakeConeIn(theIntake).withTimeout(0.75),
+                new IntakeConeHoldStart(theIntake).withTimeout(0.1)
             )
         );
         addCommands(extendArmWhileSecuringCone);
 
         // Drop cone
-        addCommands(new IntakeCubeOut(theIntake).withTimeout(2));
+        addCommands(new IntakeConeOut(theIntake).withTimeout(2));
 
         // Retract arm
         ParallelCommandGroup retractArmWhileDrivingBackwards = new ParallelCommandGroup(
@@ -109,3 +109,7 @@ addCommands (new DriveTrainLock(theDriveTrain));
 
 
 }
+
+
+
+

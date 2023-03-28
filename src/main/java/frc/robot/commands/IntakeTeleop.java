@@ -60,9 +60,8 @@ public class IntakeTeleop extends CommandBase {
     @Override
     public void execute() {
       // set Power to the maximum specified by the operator controller or the driver controller
-      boolean intakeCubeOutputCone = RobotContainer.getInstance().getOperatorController().getR1ButtonPressed() ;
-      boolean intakeConeOutputCube = RobotContainer.getInstance().getOperatorController().getL1ButtonPressed();
-
+      boolean intakeCubeOutputCone = RobotContainer.getInstance().getOperatorController().getR1Button() ;
+      boolean intakeConeOutputCube = RobotContainer.getInstance().getOperatorController().getL1Button();
       if (intakeCubeOutputCone) {
       // cube in or cone out
         m_intake.intakeCube(); 

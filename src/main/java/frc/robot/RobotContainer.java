@@ -123,20 +123,20 @@ private final PS4Controller operatorController = new PS4Controller(1);
         //"pathplanner/generatedJSON/Forward test.wpilib.json",
       //true));
       
-      m_chooser.addOption("Place Cone", new AutonomousPlaceCone(m_intake, m_arm, m_driveTrain));
+     // m_chooser.addOption("Place Cone", new AutonomousPlaceCone(m_intake, m_arm, m_driveTrain));
 
-      m_chooser.addOption("Place Cone and Balance", new AutonomousPlaceConeBalance(m_intake, m_arm, m_driveTrain));
+      m_chooser.addOption("Place Cone and Balance", new AutonomousPlaceConeandBalance(m_intake, m_arm, m_driveTrain));
 
-      m_chooser.addOption("Place Drive Over and Balance", new AutonomousPlaceDriveBalance(m_intake, m_arm, m_driveTrain));
+    //  m_chooser.addOption("Place Drive Over and Balance", new AutonomousPlaceDriveBalance(m_intake, m_arm, m_driveTrain));
 
-      m_chooser.addOption("Place Drive Straight and Balance", new AutonomousPlaceDriveStraightBalance(m_intake, m_arm, m_driveTrain));
+    //  m_chooser.addOption("Place Drive Straight and Balance", new AutonomousPlaceDriveStraightBalance(m_intake, m_arm, m_driveTrain));
 
       m_chooser.addOption("Place Cube and Balance", new AutonomousPlaceCubeandBalance(m_intake, m_arm, m_driveTrain));
       
-      m_chooser.addOption("Only Balance", new AutonomousOnlyBalance(m_intake, m_arm, m_driveTrain));
+    //  m_chooser.addOption("Only Balance", new AutonomousOnlyBalance(m_intake, m_arm, m_driveTrain));
 
 
-     m_chooser.setDefaultOption("Place Cone and Balance", new AutonomousPlaceConeBalance(m_intake, m_arm, m_driveTrain));
+     m_chooser.setDefaultOption("Place Cone and Balance", new AutonomousPlaceConeandBalance(m_intake, m_arm, m_driveTrain));
 //      "C:\\Users\\Laker-Programming\\FRC2023ChargedUp3\\src\\main\\deploy\\pathplanner\\generatedJSON\\Go Straight.wpilib.json",
        //"pathplanner/generatedJSON/GoStraight.wpilib.json",
 //true));
