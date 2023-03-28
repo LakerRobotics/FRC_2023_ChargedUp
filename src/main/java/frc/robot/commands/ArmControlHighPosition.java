@@ -58,7 +58,7 @@ public class ArmControlHighPosition extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double highPosition=0.5;//Set to 0.537 once workiing better
+        double highPosition=0.9;//Set to 0.537 once workiing better
         m_Arm.setPosition(highPosition);
         if(java.lang.Math.abs((m_Arm.getPosition()-highPosition)/highPosition) < 0.1){
             // Rumble power is 100% subtract 10% for every 1% off of the target position, so will be at max rumbel when at position

@@ -58,7 +58,7 @@ public class ArmControlMidPosition extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double midPosition=0.25;
+        double midPosition=0.8;
         m_Arm.setPosition(midPosition);
         if(java.lang.Math.abs((m_Arm.getPosition()-midPosition)/midPosition) < 0.1){
             // Rumble power is 66% subtract 6.6% for every 1% off of the target position, so will be at less then max rumbel when at position
